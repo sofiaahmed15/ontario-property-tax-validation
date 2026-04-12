@@ -133,13 +133,13 @@ Schedule 26A -- Taxation and Payment-in-Lieu Summary -- contains the tax levy br
 
 ## Pipeline Architecture
 
-![Data Pipeline Architecture](utils/design.png)
+![Data Pipeline Architecture](utilis/stitch/design.png)
 
 ---
 
 ## Database Schema (ERD)
 
-![Entity Relationship Diagram](utils/ERD_diagram.png)
+![Entity Relationship Diagram](utilis/ERD_diagram.png)
 
 **Note:** Hamilton's 2023 FIR was not available on the MMAH portal as of the date this analysis was conducted. This is documented as a CRITICAL anomaly in the validation framework.
 
