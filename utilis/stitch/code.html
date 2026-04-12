@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ontario Property Tax Validation Framework - Data Pipeline Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#391200",
+                    "on-error": "#ffffff",
+                    "secondary": "#206393",
+                    "secondary-container": "#90c9ff",
+                    "surface-dim": "#d8dadd",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#a7c8ff",
+                    "on-primary-fixed": "#001b3c",
+                    "primary": "#003366",
+                    "primary-fixed-dim": "#a7c8ff",
+                    "tertiary-container": "#5b2200",
+                    "on-secondary-fixed-variant": "#004a75",
+                    "outline": "#737780",
+                    "secondary-fixed": "#cee5ff",
+                    "surface": "#f7f9fc",
+                    "tertiary-fixed-dim": "#ffb693",
+                    "on-secondary-fixed": "#001d32",
+                    "secondary-fixed-dim": "#96ccff",
+                    "on-primary-fixed-variant": "#1f477b",
+                    "primary-fixed": "#d5e3ff",
+                    "on-tertiary-container": "#f9762a",
+                    "tertiary-fixed": "#ffdbcc",
+                    "surface-container": "#eceef1",
+                    "surface-container-high": "#e6e8eb",
+                    "on-surface": "#191c1e",
+                    "surface-container-highest": "#e0e3e6",
+                    "surface-bright": "#f7f9fc",
+                    "surface-container-lowest": "#ffffff",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#f2f4f7",
+                    "on-primary-container": "#799dd6",
+                    "outline-variant": "#c3c6d1",
+                    "on-tertiary-fixed": "#351000",
+                    "surface-tint": "#3a5f94",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#003366",
+                    "on-surface-variant": "#43474f",
+                    "background": "#f7f9fc",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-container": "#035584",
+                    "inverse-on-surface": "#eff1f4",
+                    "inverse-surface": "#2d3133",
+                    "on-tertiary-fixed-variant": "#7a3000",
+                    "on-background": "#191c1e",
+                    "surface-variant": "#e0e3e6",
+                    "bronze": "#5b2200",
+                    "silver": "#206393",
+                    "gold": "#f9762a",
+                    "outputs": "#004a75"
+            },
+            "borderRadius": {
+                    "DEFAULT": "4px",
+                    "lg": "4px",
+                    "xl": "8px",
+                    "full": "12px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .container-shadow {
+            box-shadow: 0 8px 30px -4px rgba(0, 51, 102, 0.12);
+        }
+        .flow-arrow-prominent {
+            position: relative;
+        }
+        .flow-arrow-prominent::after {
+            content: 'arrow_forward';
+            font-family: 'Material Symbols Outlined';
+            position: absolute;
+            right: -42px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 36px;
+            font-weight: 300;
+            color: #94A3B8;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .flow-arrow-down {
+            position: relative;
+        }
+        .flow-arrow-down::after {
+            content: 'arrow_downward';
+            font-family: 'Material Symbols Outlined';
+            position: absolute;
+            bottom: -42px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 36px;
+            font-weight: 300;
+            color: #94A3B8;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .black-border {
+            border: 2px solid #000000 !important;
+        }
+        .card-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background-color: #f2f4f7;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container min-h-screen overflow-x-hidden flex flex-col">
+<main class="py-10 px-6 flex-grow flex flex-col justify-center w-full max-w-[1440px] mx-auto">
+<!-- Title Section -->
+<div class="mb-12 text-center w-full pt-10"> <!-- pt-10 adds approximately 40px down -->
+<h1 class="font-headline text-3xl font-extrabold tracking-tight text-primary mb-2">
+            Ontario Property Tax Validation Framework
+        </h1>
+<p class="font-headline text-base text-secondary font-bold tracking-[0.2em] uppercase">
+            Data Pipeline Architecture
+        </p>
+</div>
+<!-- Main Pipeline Flow -->
+<div class="flex flex-row gap-12 items-end justify-center w-full">
+<!-- Lane 1: Source Box -->
+<div class="w-60 bg-white border border-outline-variant/30 rounded-xl p-4 container-shadow flex flex-col gap-4 flow-arrow-prominent black-border">
+<div class="flex items-center gap-3 border-b border-outline-variant/20 pb-3">
+<div class="bg-primary p-1.5 rounded-lg text-white flex shrink-0"><span class="material-symbols-outlined text-xl" data-icon="database">database</span></div>
+<div>
+<span class="block text-[9px] uppercase tracking-widest font-extrabold text-outline leading-none mb-1">Source</span>
+<h3 class="font-headline font-extrabold text-[12px] text-primary leading-tight uppercase">Data Source</h3>
+</div>
+</div>
+<div class="space-y-2">
+<div class="card-item">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="public">public</span>
+<span class="font-headline font-bold text-[11px] text-primary">Ontario MMAH FIR Portal</span>
+</div>
+</div>
+</div>
+<!-- Lane 2: Bronze Layer -->
+<div class="w-60 bg-white border border-outline-variant/30 rounded-xl p-4 container-shadow flex flex-col gap-4 flow-arrow-prominent black-border">
+<div class="flex items-center gap-3 border-b border-outline-variant/20 pb-3">
+<div class="bg-bronze p-1.5 rounded-lg text-white flex shrink-0"><span class="material-symbols-outlined text-xl" data-icon="database">database</span></div>
+<div>
+<span class="block text-[9px] uppercase tracking-widest font-extrabold text-outline leading-none mb-1">Bronze Layer</span>
+<h3 class="font-headline font-extrabold text-[12px] text-bronze leading-tight uppercase">Raw Ingestion</h3>
+</div>
+</div>
+<div class="space-y-2">
+<div class="card-item">
+<span class="material-symbols-outlined text-bronze text-sm" data-icon="raw_on">raw_on</span>
+<span class="font-headline font-bold text-[11px] text-primary">bronze_fir_raw</span>
+</div>
+<div class="card-item">
+<span class="material-symbols-outlined text-bronze text-sm" data-icon="checklist">checklist</span>
+<span class="font-headline font-bold text-[11px] text-primary">bronze_sub_status</span>
+</div>
+</div>
+</div>
+<!-- Lane 3: Stacked Reference and Silver Box -->
+<div class="flex flex-col gap-12 w-60 items-center">
+<!-- Static Reference Tables -->
+<div class="bg-white border border-outline-variant/30 rounded-xl p-4 container-shadow flex flex-col gap-4 w-full flow-arrow-down black-border">
+<div class="flex items-center gap-3 border-b border-outline-variant/20 pb-3">
+<div class="bg-outline p-1.5 rounded-lg text-white flex shrink-0"><span class="material-symbols-outlined text-xl" data-icon="table_chart">table_chart</span></div>
+<div>
+<span class="block text-[9px] uppercase tracking-widest font-extrabold text-outline leading-none mb-1">Reference</span>
+<h3 class="font-headline font-extrabold text-[12px] text-on-surface leading-tight uppercase">Static Tables</h3>
+</div>
+</div>
+<div class="space-y-2">
+<div class="card-item">
+<span class="material-symbols-outlined text-outline text-sm" data-icon="location_city">location_city</span>
+<span class="font-headline font-bold text-[11px] text-primary">ref_municipalities</span>
+</div>
+<div class="card-item">
+<span class="material-symbols-outlined text-outline text-sm" data-icon="category">category</span>
+<span class="font-headline font-bold text-[11px] text-primary">ref_property_classes</span>
+</div>
+<div class="card-item">
+<span class="material-symbols-outlined text-outline text-sm" data-icon="calendar_today">calendar_today</span>
+<span class="font-headline font-bold text-[11px] text-primary">ref_fiscal_years</span>
+</div>
+<div class="card-item">
+<span class="material-symbols-outlined text-outline text-sm" data-icon="gavel">gavel</span>
+<span class="font-headline font-bold text-[11px] text-primary">ref_validation_rules</span>
+</div>
+</div>
+</div>
+<!-- Silver Box -->
+<div class="w-full bg-white border border-outline-variant/30 rounded-xl p-4 container-shadow flex flex-col gap-4 flow-arrow-prominent black-border">
+<div class="flex items-center gap-3 border-b border-outline-variant/20 pb-3">
+<div class="bg-silver p-1.5 rounded-lg text-white flex shrink-0"><span class="material-symbols-outlined text-xl" data-icon="database">database</span></div>
+<div>
+<span class="block text-[9px] uppercase tracking-widest font-extrabold text-outline leading-none mb-1">Silver Layer</span>
+<h3 class="font-headline font-extrabold text-[12px] text-silver leading-tight uppercase">Enriched Data</h3>
+</div>
+</div>
+<div class="space-y-2">
+<div class="card-item">
+<span class="material-symbols-outlined text-silver text-sm" data-icon="auto_fix_high">auto_fix_high</span>
+<span class="font-headline font-bold text-[11px] text-primary">silver_fir_tax_levy</span>
+</div>
+<div class="card-item">
+<span class="material-symbols-outlined text-silver text-sm" data-icon="verified_user">verified_user</span>
+<span class="font-headline font-bold text-[11px] text-primary">silver_sub_compliance</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Lane 4: Gold Box -->
+<div class="w-60 bg-white border border-outline-variant/30 rounded-xl p-4 container-shadow flex flex-col gap-4 flow-arrow-prominent black-border">
+<div class="flex items-center gap-3 border-b border-outline-variant/20 pb-3">
+<div class="bg-gold p-1.5 rounded-lg text-white flex shrink-0"><span class="material-symbols-outlined text-xl" data-icon="database">database</span></div>
+<div>
+<span class="block text-[9px] uppercase tracking-widest font-extrabold text-outline leading-none mb-1">Gold Layer</span>
+<h3 class="font-headline font-extrabold text-[12px] text-gold leading-tight uppercase">Validation Logic</h3>
+</div>
+</div>
+<div class="space-y-2">
+<div class="card-item">
+<span class="material-symbols-outlined text-gold text-sm" data-icon="rule">rule</span>
+<span class="font-headline font-bold text-[11px] text-primary">gold_validation</span>
+</div>
+<div class="card-item">
+<span class="material-symbols-outlined text-gold text-sm" data-icon="compare_arrows">compare_arrows</span>
+<span class="font-headline font-bold text-[11px] text-primary">gold_yoy_comp</span>
+</div>
+<div class="card-item">
+<span class="material-symbols-outlined text-gold text-sm" data-icon="warning">warning</span>
+<span class="font-headline font-bold text-[11px] text-primary">gold_anomaly_log</span>
+</div>
+</div>
+</div>
+<!-- Lane 5: Deliverables Box -->
+<div class="w-60 bg-white border border-outline-variant/30 rounded-xl p-4 container-shadow flex flex-col gap-4 black-border">
+<div class="flex items-center gap-3 border-b border-outline-variant/20 pb-3">
+<div class="bg-outputs p-1.5 rounded-lg text-white flex shrink-0"><span class="material-symbols-outlined text-xl" data-icon="inventory_2">inventory_2</span></div>
+<div>
+<span class="block text-[9px] uppercase tracking-widest font-extrabold text-outline leading-none mb-1">Deliverables</span>
+<h3 class="font-headline font-extrabold text-[12px] text-outputs leading-tight uppercase">Outputs</h3>
+</div>
+</div>
+<div class="space-y-2">
+<div class="card-item">
+<span class="material-symbols-outlined text-outputs text-sm" data-icon="description">description</span>
+<span class="font-headline font-bold text-[11px] text-primary">Excel Validation</span>
+</div>
+<div class="card-item">
+<span class="material-symbols-outlined text-outputs text-sm" data-icon="database">database</span>
+<span class="font-headline font-bold text-[11px] text-primary">SQL Production</span>
+</div>
+<div class="card-item">
+<span class="material-symbols-outlined text-outputs text-sm" data-icon="code">code</span>
+<span class="font-headline font-bold text-[11px] text-primary">Portfolio Repo</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Status Legend -->
+<div class="max-w-2xl mx-auto p-4 bg-white/40 backdrop-blur rounded-xl border border-outline-variant/20 mt-16">
+<div class="flex flex-wrap justify-center gap-8">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded bg-bronze shadow-sm border border-black/10"></div>
+<span class="font-headline font-bold text-[10px] uppercase tracking-wider text-primary">Bronze: Raw</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded bg-silver shadow-sm border border-black/10"></div>
+<span class="font-headline font-bold text-[10px] uppercase tracking-wider text-primary">Silver: Enriched</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded bg-gold shadow-sm border border-black/10"></div>
+<span class="font-headline font-bold text-[10px] uppercase tracking-wider text-primary">Gold: Validated</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded bg-outputs shadow-sm border border-black/10"></div>
+<span class="font-headline font-bold text-[10px] uppercase tracking-wider text-primary">Outputs: Deliverables</span>
+</div>
+</div>
+</div>
+</main>
+</body></html>
