@@ -106,6 +106,7 @@ These findings are not conclusions, but indicators for further validation agains
 ---
 
 ## Project Structure
+```
 ontario-property-tax-validation/
 ├── README.md
 ├── docs/
@@ -132,7 +133,7 @@ ontario-property-tax-validation/
 └── excel/
     └── property_tax_validation.xlsx
 
-
+```
 (See full structure in repository)
 
 ---
